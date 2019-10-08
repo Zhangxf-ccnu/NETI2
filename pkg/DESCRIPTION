@@ -1,0 +1,18 @@
+Package: NETI2
+Type: Package
+Title: Joint reconstruction of multiple gene networks by simultaneously capturing inter-tumor
+       and intra-tumor heterogeneity
+Version: 1.0.0
+Author: Jia-Juan Tu
+Maintainer: Jia-Juan Tu <adaline_juan@mails.ccnu.edu.cn>
+Description: NETI2 is a method designed for jointly estimating multiple gene networks across multiple cancer subtypes. NETI2 can simultaneously characterize inter-tumor and intra-tumor heterogeneity at the network level.
+Depends: R(>= 3.4.2)
+Imports: MASS, Matrix, QUIC, igraph, mvtnorm, foreach 
+Suggests: knitr, 
+          rmarkdown
+VignetteBuilder: knitr
+RoxygenNote: 6.1.1
+License: GPL(>= 2)
+Encoding: UTF-8
+LazyData: true
+
