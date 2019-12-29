@@ -88,8 +88,6 @@ generate.data <- function(p = 100, n = 100, K = 4, network.type = "ER", umin = 0
   for (k in 1:K){
     realP[[k,1]] = as.matrix(rbeta(nvec[k],meanP*sizeP,(1-meanP)*sizeP),ncol=1)
 
-    purity[[k,1]] = as.matrix(rbeta(length(realP[[k,1]]),realP[[k,1]],(1-realP[[k,1]])) )
-    purity[[k,1]][purity[[k,1]]>.99]<-.99; purity[[k,1]][purity[[k,1]]<.01]<-.01
 
   }
 
@@ -98,6 +96,6 @@ generate.data <- function(p = 100, n = 100, K = 4, network.type = "ER", umin = 0
   }
 
 
-  return(list(X = X,theta.y = theta.y, theta.z = theta.z, purity =purity))
+  return(list(X = X,theta.y = theta.y, theta.z = theta.z, purity =  realP))
 }
 

@@ -12,11 +12,11 @@ NETI2(X,purity,lambda, tau, delta)
 \item{purity}{A list (length = \eqn{K}) of the tumor purity information vectors (\eqn{n_k \times 1}), where K is the number of cancer subtypes
 and \eqn{n_k} is the sample size of k-th cancer subtype.}
 
-\item{lambda}{The common tuning parameter for controlling the overall degree sparsity of the estiamted gene networks. For details, refer to Supplementary TableS7.}
+\item{lambda}{The common tuning parameter for controlling the overall degree sparsity of the estiamted gene networks. For details, refer to Supplementary TableS6.}
 
-\item{tau}{The tuning parameter balances the network size between non-cancerous and cancerous networks. For details, refer to Supplementary TableS7.}
+\item{tau}{The tuning parameter balances the network size between non-cancerous and cancerous networks. For details, refer to Supplementary TableS6.}
 
-\item{delta}{The tuning parameter balances the network size between subtype specific networks. For details, refer to Supplementary TableS7.}
+\item{delta}{The tuning parameter balances the network size between subtype specific networks. For details, refer to Supplementary TableS6.}
 }
 \value{
 \item{\code{theta.y}}{A list (length = \eqn{K}) of estimated precision matrices from cancerous cells of different  cancer subtyes.}
@@ -41,11 +41,11 @@ Each iteration of the EM algorithm consists of two steps: E-step and M-step. For
 \examples{
 # Simulation data
 data.x= generate.data(p = 100, n = 100, K = 4, network.type ="ER", umin = 0.5, umax = 1)
-result = NETI2(data.x$X,data.x$purity, lambda = 0.9, tau = 0.5,delta = 0.5)
+result = NETI2(data.x$X,data.x$purity, lambda = 0.6, tau = 0.5,delta = 0.5)
 
 # TCGA breast cancer data
 data("TCGA.BRCA")
-result = NETI2(TCGA.BRCA$BRCA.data,TCGA.BRCA$BRCA.purity, lambda = 1.6, tau = 0.4,delta = 0.2)
+result = NETI2(TCGA.BRCA$X,TCGA.BRCA$purity, lambda = 0.6, tau = 0.4,delta = 0.2)
 }
 \references{
 Jia-Juan Tu, Le Ou-Yang, Hong Yan, Xiao-Fei Zhang and Hong Qin (2019), Joint reconstruction of multiple gene networks by simultaneously capturing inter-tumor

@@ -7,9 +7,9 @@
 #' @param X  A list (length = \eqn{K}) of data matrices (\eqn{n_k \times p}), where K is the number of cancer subtypes and \eqn{n_k} is the sample size of k-th cancer subtype.
 #' @param purity A list (length = \eqn{K}) of the tumor purity information vectors (\eqn{n_k \times 1}), where K is the number of cancer subtypes
 #' and \eqn{n_k} is the sample size of k-th cancer subtype.
-#' @param lambda  The common tuning parameter for controlling the overall degree sparsity of the estiamted gene networks. For details, refer to Supplementary TableS7.
-#' @param tau   The tuning parameter balances the network size between non-cancerous and cancerous networks. For details, refer to Supplementary TableS7.
-#' @param delta  The tuning parameter balances the network size between subtype specific networks. For details, refer to Supplementary TableS7.
+#' @param lambda  The common tuning parameter for controlling the overall degree sparsity of the estiamted gene networks. For details, refer to Supplementary TableS6.
+#' @param tau   The tuning parameter balances the network size between non-cancerous and cancerous networks. For details, refer to Supplementary TableS6.
+#' @param delta  The tuning parameter balances the network size between subtype specific networks. For details, refer to Supplementary TableS6.
 #' @details The function is used to jointly reconstruction of multiple gene networks by simultaneously capturing inter-tumor
 #'    and intra-tumor heterogeneity. For each cancer subtype, the observed gene  expression levels of tumor samples are assumed to be a
 #'  mixture of expressions from non-cancerous and cancerous cells. The gene  expression levels of cancerous cells are assumed to follow subtype
@@ -34,11 +34,11 @@
 #' @export
 #' @examples # Simulation data
 #' data.x= generate.data(p = 100, n = 100, K = 4, network.type ="ER", umin = 0.5, umax = 1)
-#' result = NETI2(data.x$X,data.x$purity, lambda = 0.9, tau = 0.5,delta = 0.5)
+#' result = NETI2(data.x$X,data.x$purity, lambda = 0.6, tau = 0.5,delta = 0.5)
 #'
 #' # TCGA breast cancer data
 #' data("TCGA.BRCA")
-#' result = NETI2(TCGA.BRCA$BRCA.data,TCGA.BRCA$BRCA.purity, lambda = 1.6, tau = 0.4,delta = 0.2)
+#' result = NETI2(TCGA.BRCA$X,TCGA.BRCA$purity, lambda = 0.6, tau = 0.4,delta = 0.2)
 
 NETI2<- function(X,purity,lambda = 1.6, tau = 0.4,delta = 0.2){
 
@@ -177,10 +177,10 @@ EMalg<-function (X,Epurity,paraMY_mu,paraMY_sig,paraMZ_mu,paraMZ_sig,lambda_y, l
 
   for (ii in 1:K){  n[ii]=  nrow(X[[ii]])}
   sumn=sum(n)
-  nbar=sumn/4
+  nbar=sumn/K
   n_bar=(nbar^delta)*(n^(1-delta))
   lambday=lambda_y*n_bar
-  lambdaz=lambda_z*nbar
+  lambdaz=lambda_z* sumn
 
   p=dim(X[[1]])[2]
   ESigmay=matrix(list(), K,1)
@@ -228,7 +228,7 @@ EMalg<-function (X,Epurity,paraMY_mu,paraMY_sig,paraMZ_mu,paraMZ_sig,lambda_y, l
 
       lambdaym=matrix(lambday[ik],p,p)
       diag(lambdaym)=0
-      re_y<-QUIC(Sy_p, lambdaym/n[ik],msg = 0)
+      re_y<-QUIC(Sy_p, lambdaym/n[ik],msg = 0, maxIter = 500)
       Sigmay[[ik]]=re_y$W
       thetay[[ik]]=re_y$X
     }
@@ -249,7 +249,7 @@ EMalg<-function (X,Epurity,paraMY_mu,paraMY_sig,paraMZ_mu,paraMZ_sig,lambda_y, l
 
     lambdazm=matrix(lambdaz,p,p)
     diag(lambdazm)=0
-    re_z<-QUIC(Sz_p,lambdazm/sumn,msg = 0)
+    re_z<-QUIC(Sz_p,lambdazm/sumn,msg = 0, maxIter = 500)
     Sigmaz=re_z$W
     thetaz=re_z$X;
 
